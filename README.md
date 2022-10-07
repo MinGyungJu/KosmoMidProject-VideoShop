@@ -1,0 +1,1 @@
+# KosmoMidProject-VideoShop
