@@ -1,12 +1,26 @@
 package	 view;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.table.AbstractTableModel; 
-import javax.swing.text.TabExpander;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.AbstractTableModel;
 
 import model.VideoDao;
 import model.dao.VideoDaoImpl;
@@ -17,7 +31,7 @@ public class VideoView extends JPanel
 {	
 	//	member field
 	JTextField	tfVideoNum, tfVideoTitle, tfVideoDirector, tfVideoActor;
-	JComboBox	comVideoJanre;
+	JComboBox	comVideoGenre;
 	JTextArea	taVideoContent;
 
 	JCheckBox	cbMultiInsert;
@@ -31,6 +45,7 @@ public class VideoView extends JPanel
 	
 	VideoTableModel tbModelVideo;
 	
+	// 비즈니스 로직
 	VideoDao model;
 
 	//##############################################
@@ -42,14 +57,18 @@ public class VideoView extends JPanel
 		connectDB();	// DB연결
 	}
 	
+	// --------------------------------------------------------------------------------------
+	
 	public void connectDB(){	// DB연결
 		try {
 			model = new VideoDaoImpl();
 		} catch (Exception e) {
+			System.out.println("비디오 관리 - 드라이버 로딩 실패" + e.getMessage());
 			e.printStackTrace();
-			System.out.println("VIDEO DRIVER LOADING FAILURE: " + e.getMessage());
-		}//catch
+		}
 	}
+	
+	// --------------------------------------------------------------------------------------
 	
 	public void eventProc(){
 		// 체크박스가 눌렸을 때 tfInseftCount 가 쓸수있게됨
@@ -72,8 +91,10 @@ public class VideoView extends JPanel
 		bVideoModify.addActionListener(btnHandler);
 		bVideoDelete.addActionListener(btnHandler);
 		tfVideoSearch.addActionListener(btnHandler);
-		// 검색한 열을 클릭했을 때
 		
+		// --------------------------------------------------------------------------------------
+		
+		// 검색한 열을 클릭했을 때
 		tableVideo.addMouseListener(new MouseAdapter(){
 			public void mouseClicked(MouseEvent ev){
 				
@@ -83,7 +104,7 @@ public class VideoView extends JPanel
 					// Object -> Integer -> int 형변환
 					int vNum = ((Integer)tableVideo.getValueAt(row, col)).intValue();
 					JOptionPane.showMessageDialog(null, vNum);
-					
+					searchByNum(vNum);
 					 
 				}catch(Exception ex){
 					System.out.println("실패 : "+ ex.getMessage());
@@ -91,7 +112,9 @@ public class VideoView extends JPanel
 				
 			}
 		});
-	}		
+	}
+	
+	// --------------------------------------------------------------------------------------
 	
 	// 버튼 이벤트 핸들러 만들기
 	class ButtonEventHandler implements ActionListener{
@@ -113,38 +136,77 @@ public class VideoView extends JPanel
 		}
 	}
 	
-	void clearText() {
+	// --------------------------------------------------------------------------------------
+	
+	public void clearText() {
 		tfVideoNum.setText(null);
 		tfVideoTitle.setText(null);
 		tfVideoDirector.setText(null);
 		tfVideoActor.setText(null);
 		taVideoContent.setText(null);
 		tfInsertCount.setText(null);
-	}//clearText
+	}
+	
+	// --------------------------------------------------------------------------------------
 	
 	// 입고 클릭시  - 비디오 정보 등록
+	
 	public void registVideo(){
-		 //(1) 화면의 사용자 입력값 얻어오기
-		 //(2) 1번의 값들을 VideoVO 에 지정
-		 VideoVO vo = new VideoVO();
-		 vo.setActor(tfVideoActor.getText());
-		 vo.setDirector(tfVideoDirector.getText());
-		 vo.setV_desc(taVideoContent.getText());
-		 vo.setTitle(tfVideoTitle.getText());
-		 vo.setGenre((String)comVideoJanre.getSelectedItem()); 
-		 int count = Integer.parseInt(tfInsertCount.getText());
-		 
-		 //(3)모델의 insertVideo 호출 
-		 try {
+		 //JOptionPane.showMessageDialog(null, "입고");
+		
+		// 1. 화면의 사용자 입력값 얻어오기
+		//2. 1번 값들을  videoVO 에 지정 
+		VideoVO vo = new VideoVO();
+		vo.setTitle(tfVideoTitle.getText());
+		vo.setDirector(tfVideoDirector.getText());
+		vo.setActor(tfVideoActor.getText());
+		vo.setV_desc(taVideoContent.getText());
+		vo.setGenre((String)comVideoGenre.getSelectedItem());
+		
+		int count = Integer.parseInt(tfInsertCount.getText());
+		
+		try {
 			model.insertVideo(vo, count);
-			JOptionPane.showMessageDialog(null,"입고 성공");
-			//(4) 화면지우기
+			JOptionPane.showMessageDialog(null, "입고성공~!!");
 			clearText();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
+		}catch (Exception e) {
+			System.out.println("비디오 입고 실패"+e.getMessage());
 			e.printStackTrace();
-		}//catch
-	}//registVideo()
+		}
+	}
+	
+	// --------------------------------------------------------------------------------------
+	
+	// 비디오 현황 검색
+	public void searchVideo(){
+		try {
+			tbModelVideo.data = model.selectVideo(comVideoSearch.getSelectedItem().toString(),tfVideoSearch.getText());
+			tbModelVideo.fireTableDataChanged();
+		}catch(Exception ex) {
+			System.out.println("검색실패" + ex.getMessage());
+		}
+	}
+	
+	// --------------------------------------------------------------------------------------
+	
+	// 비디오 번호로 검색
+	public void searchByNum(int vNum) {
+		try {
+			clearText();
+			VideoVO vo = model.selectByNum(vNum);
+			tfVideoNum.setText(Integer.toString(vo.getVno()));
+			tfVideoTitle.setText(vo.getTitle());
+			comVideoGenre.setSelectedItem(vo.getGenre());
+			tfVideoDirector.setText(vo.getDirector());
+			tfVideoActor.setText(vo.getActor());
+			taVideoContent.setText(vo.getV_desc());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// --------------------------------------------------------------------------------------
 	
 	public void initStyle(){   
 		tfVideoNum.setEditable(false); // 입력하지 못하게 만듬.
@@ -163,18 +225,10 @@ public class VideoView extends JPanel
 		
 		JOptionPane.showMessageDialog(null, "삭제");
 	}
-	
-	// 비디오현황검색
-		public void searchVideo(){
-			try {
-			tbModelVideo.data = model.selectVideo(comVideoSearch.getSelectedItem().toString(),tfVideoSearch.getText());
-			tbModelVideo.fireTableDataChanged(); //모델쪽에서 데이터 변경을 뷰쪽으로 신호
-		
-			}catch(Exception e) {
-				System.out.println("검색실패 : " + e.getMessage());
-			}//catch
-		}//searchVideo()
-		
+
+	// --------------------------------------------------------------------------------------
+	// --------------------------------------------------------------------------------------
+	// --------------------------------------------------------------------------------------
 	
 	//  화면설계 메소드
 	public void addLayout(){
@@ -184,8 +238,8 @@ public class VideoView extends JPanel
 		tfVideoDirector = new JTextField();
 		tfVideoActor = new JTextField();
 		
-		String []cbJanreStr = {"멜로","엑션","스릴","코미디"};
-		comVideoJanre = new JComboBox(cbJanreStr);
+		String []cbgenreStr = {"멜로","엑션","스릴","코미디"};
+		comVideoGenre = new JComboBox(cbgenreStr);
 		taVideoContent = new JTextArea();
 		
 		cbMultiInsert = new JCheckBox("다중입고");
@@ -218,7 +272,7 @@ public class VideoView extends JPanel
 				p_west_center_north.add(new JLabel("비디오번호"));
 				p_west_center_north.add(tfVideoNum);
 				p_west_center_north.add(new JLabel("장르"));
-				p_west_center_north.add(comVideoJanre);
+				p_west_center_north.add(comVideoGenre);
 				p_west_center_north.add(new JLabel("제목"));
 				p_west_center_north.add(tfVideoTitle);
 				p_west_center_north.add(new JLabel("감독"));
