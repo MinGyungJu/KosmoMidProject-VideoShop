@@ -3,7 +3,12 @@ package view;
 import java.awt.*;
 import javax.swing.*;
 
+import model.CustomerDao;
+import model.dao.CustomerDaoImpl;
+import model.vo.CustomerVO;
+
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class CustomerView extends JPanel {
 	JFrame frm;
@@ -12,6 +17,8 @@ public class CustomerView extends JPanel {
 
 	JTextField tfCustNameSearch, tfCustTelSearch;
 	JButton bCustNameSearch, bCustTelSearch;
+	// 비지니스로직
+	CustomerDao model;
 
 	public CustomerView() {
 		addLayout();
@@ -41,38 +48,123 @@ public class CustomerView extends JPanel {
 			} else if (o == bCustTelSearch) { // 이름검색
 				searchByTel(); // 전화번호 검색
 			} else if (o == bCustNameSearch) { // 이름검색
-				System.out.println("이름검색");
+				searchByName();
 			}
 		}
-	}
+	}// ButtonEventHandler
 
-	// 회원가입하는 메소드
+	public void clearText() {
+		tfCustName.setText(null);
+		tfCustTel.setText(null);
+		tfCustTelAid.setText(null);
+		tfCustAddr.setText(null);
+		tfCustEmail.setText(null);
+	}// clearText
+		// 회원가입하는 메소드
+
 	public void registCustomer() {
-
 		// 1. 화면 텍스트필드의 입력값 얻어오기
 		// 2. 1값들을 Customer 클래스의 멤버로지정
+		CustomerVO vo = new CustomerVO();
+		vo.setAddr(tfCustAddr.getText());
+		vo.setEmail(tfCustEmail.getText());
+		vo.setName(tfCustName.getText());
+		vo.setTel(tfCustTel.getText());
+		vo.setTel2(tfCustTelAid.getText());
 		// 3. Model 클래스 안에 insertCustomer () 메소드 호출하여 2번 VO 객체를 넘김
+		try {
+			model.insertCustomer(vo);
+			JOptionPane.showMessageDialog(null, "입력이 되었습니다.");
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, "입력이 안되었습니다...");
+			e1.printStackTrace();
+		}
 		// 4. 화면 초기화
-		JOptionPane.showMessageDialog(null, "입력");
-	}
+		clearText();
+	}// registerCustomer()
+
+	// 회원정보수정
+	public void updateCustomer() {
+		// 1. 화면 텍스트필드의 입력값 얻어오기
+		// 2. 1값들을 Customer 클래스의 멤버로지정
+		CustomerVO vo = new CustomerVO();
+		vo.setAddr(tfCustAddr.getText());
+		vo.setEmail(tfCustEmail.getText());
+		vo.setName(tfCustName.getText());
+		vo.setTel(tfCustTel.getText());
+		vo.setTel2(tfCustTelAid.getText());
+
+		try {
+			int res = model.updateCustomer(vo);
+			JOptionPane.showMessageDialog(null, "수정이 되었습니다.");
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			JOptionPane.showMessageDialog(null, "수정이 안되었습니다...");
+		}
+		// 4. 화면 초기화
+		clearText();
+	}// updateCustomer()
 
 	// 전화번호에 의한 검색
 	public void searchByTel() {
 		// 1. 입력한 전화번호 얻어오기
+		String telToSearch = tfCustTelSearch.getText();
 		// 2. Model의 전화번호 검색메소드 selectByTel() 호출
-		// 3. 2번의 넘겨받은 Customer의 각각의 값을 화면 텍스트 필드 지정
+		try {
+			CustomerVO vo = model.selectByTel(telToSearch);
+			// 3. 2번의 넘겨받은 Customer의 각각의 값을 화면 텍스트 필드 지정
+			tfCustName.setText(vo.getName());
+			tfCustTel.setText(vo.getTel());
+			tfCustTelAid.setText(vo.getTel2());
+			tfCustAddr.setText(vo.getAddr());
+			tfCustEmail.setText(vo.getEmail());
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "검색이 안되었습니다...");
+			e.printStackTrace();
+		} // catch
 
-		JOptionPane.showMessageDialog(null, "검색");
-	}
+	}// searchByTel()
 
-	// 회원정보수정
-	public void updateCustomer() {
+	// 이름에 의한 검색
+	public void searchByName() {
+		String nameToSearch = tfCustNameSearch.getText();
+		try {
+			ArrayList<CustomerVO> list = model.selectByName(nameToSearch);
+			// 전화번호들만 저장
+			String[] phoneNumbers = new String[list.size()];
+			int i = 0;
+			for (CustomerVO vo : list) {
+				phoneNumbers[i++] = vo.getTel();
+			} // for
+				// 전화번호 정보 보기 고름
+			Object selected = JOptionPane.showInputDialog(null, "어느 전화번호 정보를 보실껀지 고르세요.", "중복된 이름",
+					JOptionPane.DEFAULT_OPTION, null, phoneNumbers, "0");
+			if (selected != null) {// null if the user cancels.
+				String selectedString = selected.toString();
+				tfCustTelSearch.setText(selectedString);
+				searchByTel();
+				// do something
+			} else {
+				tfCustNameSearch.setText(null);
+			} // else
+				// https://stackoverflow.com/questions/30265720/java-joptionpane-radio-buttons
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "검색이 안되었습니다...");
+		} // catch
 
-		JOptionPane.showMessageDialog(null, "수정");
-	}
+	}// searchByName()
 
 	public void connectDB() {
-
+		try {
+			model = new CustomerDaoImpl();
+		} catch (Exception e) {
+			System.out.println("고객관리 드라이버 로딩 실패 : " + e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	public void addLayout() {
