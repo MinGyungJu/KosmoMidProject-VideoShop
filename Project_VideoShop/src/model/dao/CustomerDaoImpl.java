@@ -21,7 +21,7 @@ public class CustomerDaoImpl implements CustomerDao {
 	public CustomerDaoImpl() throws Exception {
 		// 1. 드라이버로딩
 		Class.forName(DRIVER);
-		System.out.println("DRIVER LOADING SUCESS");
+		System.out.println("CUSTOMER DRIVER LOADING SUCESS");
 	}
 
 	/*
