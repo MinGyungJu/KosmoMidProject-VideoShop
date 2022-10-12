@@ -1,51 +1,44 @@
 package model.vo;
 
 public class CustomerVO {
-	String custName;		// 고객명
-	String custTel1;			// 전화번호
-	String custTel2;			// 보조 전화번호
-	String custAddr;		// 주소
-	String custEmail;		// 이메일
+	String name;		// 고객명
+	String tel;			// 전화번호 (★ prime key)
+	String tel2;		// 보조 전화번호
+	String addr;		// 주소
+	String email;		// 이메일
+	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+	public String getTel2() {
+		return tel2;
+	}
+	public void setTel2(String tel2) {
+		this.tel2 = tel2;
+	}
+	public String getAddr() {
+		return addr;
+	}
+	public void setAddr(String addr) {
+		this.addr = addr;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-public String getCustName() {
-	return custName;
-}
 
-public void setCustName(String custName) {
-	this.custName = custName;
-}
-
-public String getCustTel1() {
-	return custTel1;
-}
-
-public void setCustTel1(String custTel1) {
-	this.custTel1 = custTel1;
-}
-
-public String getCustTel2() {
-	return custTel2;
-}
-
-public void setCustTel2(String custTel2) {
-	this.custTel2 = custTel2;
-}
-
-public String getCustAddr() {
-	return custAddr;
-}
-
-public void setCustAddr(String custAddr) {
-	this.custAddr = custAddr;
-}
-
-public String getCustEmail() {
-	return custEmail;
-}
-
-public void setCustEmail(String custEmail) {
-	this.custEmail = custEmail;
-}
 
 
 }

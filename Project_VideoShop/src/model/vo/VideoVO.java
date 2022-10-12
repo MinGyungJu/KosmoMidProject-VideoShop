@@ -2,18 +2,19 @@ package model.vo;
 
 public class VideoVO {
 	
-	int videoNo;					// 비디오번호
-	String genre;				// 장르
-	String videoName;			// 비디오명
-	String director;				// 감독
-	String actor;					// 배우
-	String exp;					// 설명
+	int vno;			// 비디오번호 (★ prime key)
+	String genre;		// 장르
+	String title;		// 제목
+	String director;	// 감독
+	String actor;		// 배우
+	String v_desc;		// 설명
 	
-	public int getVideoNo() {
-		return videoNo;
+	
+	public int getVno() {
+		return vno;
 	}
-	public void setVideoNo(int videoNo) {
-		this.videoNo = videoNo;
+	public void setVno(int vno) {
+		this.vno = vno;
 	}
 	public String getGenre() {
 		return genre;
@@ -21,11 +22,11 @@ public class VideoVO {
 	public void setGenre(String genre) {
 		this.genre = genre;
 	}
-	public String getVideoName() {
-		return videoName;
+	public String getTitle() {
+		return title;
 	}
-	public void setVideoName(String videoName) {
-		this.videoName = videoName;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	public String getDirector() {
 		return director;
@@ -39,12 +40,14 @@ public class VideoVO {
 	public void setActor(String actor) {
 		this.actor = actor;
 	}
-	public String getExp() {
-		return exp;
+	public String getV_desc() {
+		return v_desc;
 	}
-	public void setExp(String exp) {
-		this.exp = exp;
+	public void setV_desc(String v_desc) {
+		this.v_desc = v_desc;
 	}
+	
+	
 	
 	
 
