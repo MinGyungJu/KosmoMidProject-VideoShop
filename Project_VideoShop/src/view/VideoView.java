@@ -166,8 +166,14 @@ public class VideoView extends JPanel
 	
 	// 비디오현황검색
 		public void searchVideo(){
-			JOptionPane.showMessageDialog(null, "검색");
-		}
+			try {
+			tbModelVideo.data = model.selectVideo(comVideoSearch.getSelectedItem().toString(),tfVideoSearch.getText());
+			tbModelVideo.fireTableDataChanged(); //모델쪽에서 데이터 변경을 뷰쪽으로 신호
+		
+			}catch(Exception e) {
+				System.out.println("검색실패 : " + e.getMessage());
+			}//catch
+		}//searchVideo()
 		
 	
 	//  화면설계 메소드
