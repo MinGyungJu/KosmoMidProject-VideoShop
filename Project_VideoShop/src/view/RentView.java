@@ -170,7 +170,7 @@ public class RentView extends JPanel {
 			Object o = ev.getSource();
 
 			if (o == tfRentTel) { // 전화번호 엔터
-				rentSelectTel();
+				selectName();
 			} else if (o == bRent) { // 대여 클릭
 				rentClick();
 				selectList();
@@ -213,9 +213,19 @@ public class RentView extends JPanel {
 	}// rentClick
 
 	// 전화번호입력후 엔터
-	public void rentSelectTel() {
+		public void selectName(){
+			String tel = tfRentTel.getText();
+			
+			try {
+				String custName = model.selectName(tel);
+				tfRentCustName.setText(custName);
+			} catch (Exception e) {
+				System.out.println("이름 불러오기 오류");
+				e.printStackTrace();
+			}
+			
 
-		JOptionPane.showMessageDialog(null, "전화번호");
-	}
+			//JOptionPane.showMessageDialog(null, "전화번호");
+		}
 
 }

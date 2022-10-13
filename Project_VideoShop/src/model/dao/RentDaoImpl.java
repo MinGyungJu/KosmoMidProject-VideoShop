@@ -97,5 +97,41 @@ public class RentDaoImpl implements RentDao {
 		ps.close();
 		con.close();
 	}// returnVideo
+	
+	public String selectName(String tel) throws Exception {
+		Connection con = null;
+		PreparedStatement ps = null;
+		String name = null;
+
+		try {
+			con = DriverManager.getConnection(URL, USER, PASS);
+			//3. sql문 불러오기
+			String sql = "SELECT name FROM CUSTOMER WHERE TEL = ?";
+
+			// 4. sql 전송객체 (PreparedStatement)	
+			ps = con.prepareStatement(sql);
+			// ?세팅 -#
+			ps.setString(1, tel);
+
+
+			// 5. sql 전송
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				name = rs.getString("name");
+			}
+
+			// 6. 닫기 
+		} finally {
+			// 6. 닫기
+			ps.close();
+			con.close();
+
+		}
+
+		return name;
+
+
+
+	}
 
 }// RentDaoImpl
