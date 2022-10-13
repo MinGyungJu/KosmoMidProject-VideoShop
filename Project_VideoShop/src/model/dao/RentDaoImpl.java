@@ -45,7 +45,7 @@ public class RentDaoImpl implements RentDao {
 		// 2. Connection 연결객체 얻어오기 (con, ps)
 		con = DriverManager.getConnection(URL, USER, PASS);
 		// 3. sql 문장 만들기
-		String sql = "UPDATE rental SET status = 'Y' WHERE vno = ?";
+		String sql = "UPDATE rental SET status = 'Y' WHERE vno = ? AND status ='N'";
 		// 4. sql 전송객체 (PreparedStatement)
 		ps = con.prepareStatement(sql);
 		// ? 세팅
