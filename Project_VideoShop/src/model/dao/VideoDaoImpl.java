@@ -21,7 +21,6 @@ public class VideoDaoImpl implements VideoDao{
 	PreparedStatement ps = null;
 	
 	public VideoDaoImpl() throws Exception{
-		
 		// 1. 드라이버로딩
 		Class.forName(DRIVER);
 		System.out.println("DRIVER LOADING SUCCESS!");
@@ -78,6 +77,7 @@ public class VideoDaoImpl implements VideoDao{
 			temp.add(rs.getString("actor"));
 			data.add(temp);
 		}
+		
 		// 6. 닫기
 		ps.close();
 		con.close();
@@ -102,6 +102,7 @@ public class VideoDaoImpl implements VideoDao{
 		// 4. 전송객체
 		ps = con.prepareStatement(sql);
 		ps.setInt(1, vNum);
+		
 		// 5. 전송
 		ResultSet rs = ps.executeQuery();
 		if(rs.next()) {
@@ -112,7 +113,11 @@ public class VideoDaoImpl implements VideoDao{
 			vo.setActor(rs.getString("actor"));
 			vo.setV_desc(rs.getString("v_desc"));
 		}
-
+		
+		// 6. 닫기
+		rs.close();
+		ps.close();
+		con.close();
 		return vo;
 	}// selectByNum
 	
@@ -129,9 +134,14 @@ public class VideoDaoImpl implements VideoDao{
 		ps.setString(4, vo.getActor());
 		ps.setString(5, vo.getV_desc());
 		ps.setString(6, String.valueOf(vo.getVno()));
+		
 		// 5. 전송
 		int rs = ps.executeUpdate();
-		return (rs == 1) ? true : false;
+		
+		// 6. 닫기
+		ps.close();
+		con.close();
+		return (rs > 0) ? true : false;
 	}// modifyVideo
 	
 	// --------------------------------------------------------------------------------------
@@ -142,9 +152,14 @@ public class VideoDaoImpl implements VideoDao{
 		String sql = "DELETE FROM video WHERE vno = ?";
 		ps = con.prepareStatement(sql);
 		ps.setString(1, String.valueOf(vnum));
+		
 		// 5. 전송
 		int rs = ps.executeUpdate();
-		return (rs == 1) ? true : false;
+		
+		// 6. 닫기
+		ps.close();
+		con.close();
+		return (rs > 0) ? true : false;
 	}// deleteVideo
 	
 }//VideoDaoImpl
