@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import javax.swing.JOptionPane;
+
 import model.vo.RentDao;
 
 public class RentDaoImpl implements RentDao {
@@ -52,10 +54,22 @@ public class RentDaoImpl implements RentDao {
 		return data;
 	}//selectList
 	
-	public void rentVideo(String tel, int vnum) throws Exception {
+	public boolean rentVideo(String tel, int vnum) throws Exception {
 		// 2. Connection 연결객체 얻어오기 (con, ps)
 		con = DriverManager.getConnection(URL, USER, PASS);
 		// 3. sql 문장 만들기
+		//checking if the video is rented
+		String sqlpre = "SELECT * FROM rental WHERE vno = ? and status = 'N'";
+		ps = con.prepareStatement(sqlpre);
+		// ? 세팅 
+		ps.setInt(1, vnum); 
+		ResultSet rs  = ps.executeQuery();
+		if(rs.next()) {
+			System.out.println("HELLO");
+			JOptionPane.showMessageDialog(null, "이미 대여 되어있습니다.");
+			return false;
+		}//if
+		//inserting into rental
 		String sql = "INSERT INTO rental(rno, tel, vno, bw_date, status) VALUES(seq_rent_no.nextval,?,?,SYSDATE,'N')";
 		// 4. sql 전송객체 (PreparedStatement)
 		ps = con.prepareStatement(sql);
@@ -66,6 +80,7 @@ public class RentDaoImpl implements RentDao {
 		// 6. 닫기
 		ps.close();
 		con.close();
+		return true;
 	}// rentVideo
 
 	public void returnVideo(int vnum) throws Exception {

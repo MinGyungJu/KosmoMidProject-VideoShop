@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public interface RentDao {
 	//대여
-	public void rentVideo(String tel, int vnum) throws Exception;
+	public boolean rentVideo(String tel, int vnum) throws Exception;
 	
 	//반납
 	public void returnVideo(int vnum) throws Exception;

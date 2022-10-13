@@ -200,8 +200,11 @@ public class RentView extends JPanel {
 		int vnum = Integer.parseInt(tfRentVideoNum.getText());
 
 		try {
-			model.rentVideo(tel, vnum);
-			JOptionPane.showMessageDialog(null, "대여가 되었습니다");
+			boolean rented = model.rentVideo(tel, vnum);
+			if(rented)
+				JOptionPane.showMessageDialog(null, "대여가 되었습니다");
+			else
+				JOptionPane.showMessageDialog(null, "대여가 되지 않았습니다");
 
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "대여가 되지 않았습니다");
