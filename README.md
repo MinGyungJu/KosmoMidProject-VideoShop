@@ -1,5 +1,12 @@
 # KosmoMidProject-VideoShop
 ---
+## **exerd (데이터베이스 모델링)**
+![alt text](https://user-images.githubusercontent.com/112688146/195559658-3edf0f1e-75d1-4985-b308-543291da98df.PNG)
+
+## **exerd (물리모델)**
+![alt text](https://user-images.githubusercontent.com/112688146/195559601-cf6b8b5f-9a56-4e98-b56f-1a2827a2a491.PNG)
+---
+
 ## **회원가입**
 
 ![alt text](https://user-images.githubusercontent.com/112688146/195555654-8d4acedf-916c-4744-97eb-9937fe1ade07.PNG)
@@ -24,7 +31,7 @@
 
 ## **제목으로 작품찾기**
 
-*위와 같이, 글자 하나만 일치해도 검색 결과가 나옵니다*
+*감독과 같이, 제목도 글자 하나만 일치하면 검색 결과가 출력됩니다*
 
 ![alt text](https://user-images.githubusercontent.com/112688146/195555641-59ca526f-0d3c-46e9-ac63-7fcbb66d595e.PNG)
 
