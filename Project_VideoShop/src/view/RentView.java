@@ -40,6 +40,8 @@ public class RentView extends JPanel {
 		addLayout(); // 화면구성
 		eventProc();
 		connectDB(); // DB연결
+		selectList();
+
 	}
 
 	// DB 연결
@@ -51,7 +53,18 @@ public class RentView extends JPanel {
 			e.printStackTrace();
 		}// catch
 	}
-
+	
+	//대여목록관리
+	void selectList() {
+		try {
+			rentTM.data = model.selectList();
+			rentTM.fireTableDataChanged();
+		} catch (Exception e) {
+			System.out.println("미납목록 검색 실패");
+			e.printStackTrace();
+		}
+	}// selectList
+	
 	/* 화면 구성 */
 	void addLayout() {
 		// 멤버변수 객체 생성
@@ -160,8 +173,10 @@ public class RentView extends JPanel {
 				rentSelectTel();
 			} else if (o == bRent) { // 대여 클릭
 				rentClick();
+				selectList();
 			} else if (o == bReturn) { // 반납 클릭
 				returnClick();
+				selectList();
 			}
 
 		}

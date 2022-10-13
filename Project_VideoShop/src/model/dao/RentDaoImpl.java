@@ -25,6 +25,33 @@ public class RentDaoImpl implements RentDao {
 		System.out.println("CUSTOMER DRIVER LOADING SUCESS");
 	}
 
+	public ArrayList selectList() throws Exception {
+		ArrayList data = new ArrayList();
+		//2. 연결객체 얻어오기
+		con = DriverManager.getConnection(URL, USER, PASS);
+		//3. sql문장
+		String sql = "SELECT v.vno vno, v.title title, c.name name, c.tel tel, r.bw_date + 3 bw_date, '미납' status"
+				+ " FROM customer c join rental r on c.tel = r.tel "
+				+ "join video v on v.vno = r.vno and r.status = 'N' ";
+		//4. 전송객체
+		ps = con.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()) {
+			ArrayList t = new ArrayList();
+			t.add(rs.getInt("vno"));
+			t.add(rs.getString("title"));
+			t.add(rs.getString("name"));
+			t.add(rs.getString("tel"));
+			t.add(rs.getString("bw_date"));
+			t.add(rs.getString("status"));
+			data.add(t);
+		}//while
+		// 6. 닫기
+		ps.close();
+		con.close();
+		return data;
+	}//selectList
+	
 	public void rentVideo(String tel, int vnum) throws Exception {
 		// 2. Connection 연결객체 얻어오기 (con, ps)
 		con = DriverManager.getConnection(URL, USER, PASS);
@@ -55,10 +82,5 @@ public class RentDaoImpl implements RentDao {
 		ps.close();
 		con.close();
 	}// returnVideo
-
-	public ArrayList selectList() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}// selectList
 
 }// RentDaoImpl
