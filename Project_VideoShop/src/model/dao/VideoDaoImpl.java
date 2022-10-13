@@ -114,7 +114,37 @@ public class VideoDaoImpl implements VideoDao{
 		}
 
 		return vo;
-	}
+	}// selectByNum
 	
+	// --------------------------------------------------------------------------------------
 
-}
+	public boolean modifyVideo(VideoVO vo) throws Exception {
+		// 2.연결객체 얻어오기
+		con = DriverManager.getConnection(URL, USER, PASS);
+		String sql = "UPDATE video SET genre=?, title=?, director=?, actor=?, v_desc=? WHERE vno = ?";
+		ps = con.prepareStatement(sql);
+		ps.setString(1, vo.getGenre());
+		ps.setString(2, vo.getTitle());
+		ps.setString(3, vo.getDirector());
+		ps.setString(4, vo.getActor());
+		ps.setString(5, vo.getV_desc());
+		ps.setString(6, String.valueOf(vo.getVno()));
+		// 5. 전송
+		int rs = ps.executeUpdate();
+		return (rs == 1) ? true : false;
+	}// modifyVideo
+	
+	// --------------------------------------------------------------------------------------
+
+	public boolean deleteVideo(int vnum) throws Exception {
+		// 2.연결객체 얻어오기
+		con = DriverManager.getConnection(URL, USER, PASS);
+		String sql = "DELETE FROM video WHERE vno = ?";
+		ps = con.prepareStatement(sql);
+		ps.setString(1, String.valueOf(vnum));
+		// 5. 전송
+		int rs = ps.executeUpdate();
+		return (rs == 1) ? true : false;
+	}// deleteVideo
+	
+}//VideoDaoImpl

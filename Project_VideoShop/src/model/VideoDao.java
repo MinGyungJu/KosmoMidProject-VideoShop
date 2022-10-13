@@ -13,4 +13,10 @@ public interface VideoDao {
 	
 	// 이름으로 고객 정보 불러오기
 	public VideoVO selectByNum(int vNum) throws Exception; 
+	
+	// 비디오 정보 바꾸기
+	public boolean modifyVideo(VideoVO vo) throws Exception;
+	
+	// 비디오 지우기
+	public boolean deleteVideo(int vnum) throws Exception;
 }

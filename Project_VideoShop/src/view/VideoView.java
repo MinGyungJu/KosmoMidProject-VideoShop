@@ -103,7 +103,7 @@ public class VideoView extends JPanel
 					int col = 0;	// 검색한 열을 클릭했을 때 클릭한 열의 비디오번호
 					// Object -> Integer -> int 형변환
 					int vNum = ((Integer)tableVideo.getValueAt(row, col)).intValue();
-					JOptionPane.showMessageDialog(null, vNum);
+//					JOptionPane.showMessageDialog(null, vNum);
 					searchByNum(vNum);
 					 
 				}catch(Exception ex){
@@ -218,13 +218,37 @@ public class VideoView extends JPanel
 	
 	// 수정 클릭시 - 비디오 정보 수정
 	public void modifyVideo(){
-		JOptionPane.showMessageDialog(null, "수정");
+		// (1) 화면의 사용자 입력값 얻어오기, 값들을 VideoVO 에 지정
+		VideoVO vo = new VideoVO();
+		vo.setActor(tfVideoActor.getText());
+		vo.setDirector(tfVideoDirector.getText());
+		vo.setV_desc(taVideoContent.getText());
+		vo.setTitle(tfVideoTitle.getText());
+		vo.setGenre((String) comVideoGenre.getSelectedItem());
+		vo.setVno(Integer.parseInt(tfVideoNum.getText()));
+		try {
+			boolean modified = model.modifyVideo(vo);
+			if (modified)
+				JOptionPane.showMessageDialog(null, "수정되었습니다");
+			else
+				JOptionPane.showMessageDialog(null, "수정이 안되었습니다...");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // catch
+
 	}
 	
 	// 삭제 클릭시 - 비디오 정보 삭제
 	public void deleteVideo(){
-		
-		JOptionPane.showMessageDialog(null, "삭제");
+		try {
+			boolean modified = model.deleteVideo(Integer.parseInt(tfVideoNum.getText()));
+			if (modified)
+				JOptionPane.showMessageDialog(null, "삭제되었습니다");
+			else
+				JOptionPane.showMessageDialog(null, "삭제 안되었습니다...");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // catch
 	}
 
 	// --------------------------------------------------------------------------------------
