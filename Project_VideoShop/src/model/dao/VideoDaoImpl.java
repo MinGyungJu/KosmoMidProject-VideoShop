@@ -57,30 +57,18 @@ public class VideoDaoImpl implements VideoDao{
 	// --------------------------------------------------------------------------------------
 	
 	@Override
-	public ArrayList selectVideo(String titlediretor, String vname) throws Exception {
-		ArrayList data = new ArrayList();
-		
+	public ArrayList selectVideo(int idx, String word) throws Exception {
 		// 2. 연결객체 얻어오기
 		con = DriverManager.getConnection(URL,USER,PASS);
-		
 		// 3. sql & 전송객체
+		String [] colNames = {"title", "director"};
 		String sql;
-		if (vname.equals("")) {
-			sql ="SELECT vno, genre, title, director, actor FROM video";
-			ps = con.prepareStatement(sql);
-		} else if (titlediretor.equals("감독")) {
-			sql  ="SELECT vno, genre, title, director, actor FROM video where director = ?";
-			ps = con.prepareStatement(sql);
-			ps.setString(1, vname);
-		}
-		else {
-			sql = "SELECT vno, genre, title, director, actor FROM video WHERE title = ?";
-			ps = con.prepareStatement(sql);
-			ps.setString(1, vname);
-		}
-		
+		sql  ="SELECT vno, genre, title, director, actor FROM video "
+				+ "where "+colNames[idx]+" LIKE '%"+word+"%' ";
+		ps = con.prepareStatement(sql);
 		// 5. 전송
 		ResultSet rs = ps.executeQuery();
+		ArrayList data = new ArrayList();
 		while (rs.next()) {
 			ArrayList temp = new ArrayList();
 			temp.add(rs.getInt("vno"));
@@ -90,7 +78,6 @@ public class VideoDaoImpl implements VideoDao{
 			temp.add(rs.getString("actor"));
 			data.add(temp);
 		}
-		
 		// 6. 닫기
 		ps.close();
 		con.close();
@@ -98,7 +85,7 @@ public class VideoDaoImpl implements VideoDao{
 			
 		return data;
 		
-	}
+	}//selectVideo
 	
 	// --------------------------------------------------------------------------------------
 	
@@ -107,9 +94,6 @@ public class VideoDaoImpl implements VideoDao{
 		VideoVO vo = new VideoVO();
 		
 		// 2. 연결객체 얻어오기
-		Connection con = null; 
-		PreparedStatement ps = null;
-		
 		con = DriverManager.getConnection(URL,USER,PASS);
 
 		// 3. sql 문장

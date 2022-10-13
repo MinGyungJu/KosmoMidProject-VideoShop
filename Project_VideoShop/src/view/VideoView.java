@@ -180,8 +180,9 @@ public class VideoView extends JPanel
 	// 비디오 현황 검색
 	public void searchVideo(){
 		try {
-			tbModelVideo.data = model.selectVideo(comVideoSearch.getSelectedItem().toString(),tfVideoSearch.getText());
-			tbModelVideo.fireTableDataChanged();
+			int idx = comVideoSearch.getSelectedIndex();
+			String word = tfVideoSearch.getText();
+			tbModelVideo.data = model.selectVideo(idx, word);			tbModelVideo.fireTableDataChanged();
 		}catch(Exception ex) {
 			System.out.println("검색실패" + ex.getMessage());
 		}
