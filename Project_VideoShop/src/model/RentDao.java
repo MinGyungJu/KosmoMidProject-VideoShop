@@ -1,4 +1,4 @@
-package model.vo;
+package model;
 
 import java.util.ArrayList;
 

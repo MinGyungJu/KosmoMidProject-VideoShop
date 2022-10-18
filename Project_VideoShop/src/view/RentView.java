@@ -18,8 +18,8 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.AbstractTableModel;
 
+import model.RentDao;
 import model.dao.RentDaoImpl;
-import model.vo.RentDao;
 
 public class RentView extends JPanel {
 	JTextField tfRentTel, tfRentCustName, tfRentVideoNum;

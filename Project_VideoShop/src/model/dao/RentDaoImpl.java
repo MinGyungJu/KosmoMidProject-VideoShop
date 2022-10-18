@@ -10,7 +10,7 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
-import model.vo.RentDao;
+import model.RentDao;
 
 public class RentDaoImpl implements RentDao {
 
