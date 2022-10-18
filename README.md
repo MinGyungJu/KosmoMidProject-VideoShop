@@ -1,7 +1,7 @@
 # KosmoMidProject-VideoShop
 ---
-KosmoMidProject-VideoShop : video rental system using java and database
-
+KosmoMidProject-VideoShop : 데이타베이스와 자바를 사용하는 비디오 대여 시스템
+                            
 **VideoShop.java** : JTabbedPane을 활용하여 화면 레이아웃을 만듬
 
 *view* folder : 고객관리, 비디오관리, 대여관리 화면들을 만듬
