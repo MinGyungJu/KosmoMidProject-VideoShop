@@ -51,5 +51,7 @@
 
 ---
 **VideoShop.java** : JTabbedPane을 활용하여 화면 레이아웃을 만듬
+
 *view* folder : 고객관리, 비디오관리, 대여관리 화면들을 만듬
+
 *model* folder : DAO(Data Access Object)를 만들어 oracle DB (ID: scott, pw:tiger, ip: 192.168.0.77)와 연동기능 만듬
