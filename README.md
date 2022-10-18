@@ -1,5 +1,7 @@
 # KosmoMidProject-VideoShop
 ---
+KosmoMidProject-VideoShop : video rental system using java and database
+---
 ## **exerd (데이터베이스 모델링)**
 ![alt text](https://user-images.githubusercontent.com/112688146/195559658-3edf0f1e-75d1-4985-b308-543291da98df.PNG)
 
